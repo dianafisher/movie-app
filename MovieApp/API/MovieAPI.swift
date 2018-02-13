@@ -45,6 +45,20 @@ class MovieAPI: NSObject {
         dataTask.resume()
     }
     
+    func fetchTrailer(movieId: String) {
+//        let session = URLSession(
+//            configuration: URLSessionConfiguration.default,
+//            delegate:nil,
+//            delegateQueue:OperationQueue.main
+//        )
+//        guard let url = URL(string:"https://api.themoviedb.org/3/movie/\(movieId)/videos?api_key=\(apiKey)") else
+//        {
+//            print("Error unwrapping URL")
+//
+//            return
+//        }
+    }
+    
     func fetchMovies( completion: @escaping( _ success: Bool, _ movies: [Movie], _ error: Error? ) ->() ) {
         
         let session = URLSession(
