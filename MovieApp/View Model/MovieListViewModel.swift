@@ -17,6 +17,10 @@ class MovieListViewModel: NSObject {
         movies = []
     }
     
+    func loadConfig() {
+        movieAPI.fetchConfig()
+    }
+    
     func loadMovies(completion: @escaping( _ success: Bool, _ error: Error? ) ->()) {
         
         movieAPI.fetchMovies { (success, movies, error) in

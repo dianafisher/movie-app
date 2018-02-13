@@ -11,6 +11,8 @@ import UIKit
 class MovieListViewController: UIViewController {
 
     let MOVIE_CELL_REUSE_IDENTIFIER = "MovieTableViewCell"
+    let DETAILS_SEGUE = "DetailsSegue"
+    
     let viewModel: MovieListViewModel = MovieListViewModel()
     
     @IBOutlet weak var tableView: UITableView!
@@ -18,7 +20,17 @@ class MovieListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        tableView.delegate = self
+        tableView.dataSource = self
+        
+        // Set navigationBar tint colors
+        navigationController?.navigationBar.barTintColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]
+        
+        navigationItem.title = "Now Playing"
+
+        viewModel.loadConfig()
+        
         viewModel.loadMovies { (success, error) in
             if (success) {
                 DispatchQueue.main.async {
@@ -30,6 +42,17 @@ class MovieListViewController: UIViewController {
             }
         }
     }
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        if view.frame.width > view.frame.height {
+            // in landscape orientation
+            print("landscape orientation")
+        } else {
+            // in portrait orientation
+            print("portrait orientation")
+        }
+    }       
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -37,15 +60,21 @@ class MovieListViewController: UIViewController {
     }
     
 
-    /*
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        
+        if segue.identifier == DETAILS_SEGUE {
+            let detailsVC = segue.destination as! MovieDetailViewController
+            let cell = sender as! UITableViewCell
+            let indexPath = tableView.indexPath(for: cell)
+            let movie = viewModel.movieAt(indexPath: indexPath!)
+            detailsVC.movie = movie
+        }
     }
-    */
+    
 
 }
 
@@ -69,4 +98,5 @@ extension MovieListViewController : UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 240
     }
+        
 }
